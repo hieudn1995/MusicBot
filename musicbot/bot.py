@@ -474,18 +474,18 @@ class MusicBot(discord.Client):
             author_perms = self.permissions.for_user(author)
 
             if author not in player.voice_client.channel.members and author_perms.skip_when_absent:
-                newmsg = 'Skipping next song in `%s`: `%s` added by `%s` as queuer not in voice' % (
+                newmsg = 'Chuyển qua bài tiếp theo trong phòng `%s`: `%s` được thêm bởi `%s`' % (
                     player.voice_client.channel.name, entry.title, entry.meta['author'].name)
                 player.skip()
             elif self.config.now_playing_mentions:
-                newmsg = '%s - your song `%s` is now playing in `%s`!' % (
+                newmsg = '%s - your song `%s` is Bắt đầu phát nhạc trong phòng `%s`!' % (
                     entry.meta['author'].mention, entry.title, player.voice_client.channel.name)
             else:
-                newmsg = 'Now playing in `%s`: `%s` added by `%s`' % (
+                newmsg = 'Bắt đầu phát nhạc trong phòng `%s`: `%s` được thêm bởi `%s`' % (
                     player.voice_client.channel.name, entry.title, entry.meta['author'].name)
         else:
             # no author (and channel), it's an autoplaylist (or autostream from my other PR) entry.
-            newmsg = 'Now playing automatically added entry `%s` in `%s`' % (
+            newmsg = 'Tự động phát nhạc trong danh sách đã lưu `%s` in `%s`' % (
                 entry.title, player.voice_client.channel.name)
 
         if newmsg:
@@ -511,7 +511,7 @@ class MusicBot(discord.Client):
             elif not channel and last_np_msg:
                 channel = last_np_msg.channel
             else:
-                log.debug('no channel to put now playing message into')
+                log.debug('Vui lòng vào kết để phát nhạc')
                 return
 
             # send it in specified channel
@@ -544,7 +544,7 @@ class MusicBot(discord.Client):
 
         def _autopause(player):
             if self._check_if_empty(player.voice_client.channel):
-                log.info("Player finished playing, autopaused in empty channel")
+                log.info("Nhạc đã được phát hết. Vui lòng thêm nhạc vào danh sách.")
 
                 player.pause()
                 self.server_specific_data[player.voice_client.channel.guild]['auto_paused'] = True
@@ -553,10 +553,10 @@ class MusicBot(discord.Client):
             if not player.autoplaylist:
                 if not self.autoplaylist:
                     # TODO: When I add playlist expansion, make sure that's not happening during this check
-                    log.warning("No playable songs in the autoplaylist, disabling.")
+                    log.warning("Danh sách hiện tại không có bài hát nào. Vui lòng thêm bài hát để phát.")
                     self.config.auto_playlist = False
                 else:
-                    log.debug("No content in current autoplaylist. Filling with new music...")
+                    log.debug("Không có nội dung trong danh sách tự động hiện tại")
                     player.autoplaylist = list(self.autoplaylist)
 
             while player.autoplaylist:
@@ -1113,8 +1113,7 @@ class MusicBot(discord.Client):
         """Provides a basic template for embeds"""
         e = discord.Embed()
         e.colour = 7506394
-        e.set_footer(text='Just-Some-Bots/MusicBot ({})'.format(BOTVERSION), icon_url='https://i.imgur.com/gFHBoZA.png')
-        e.set_author(name=self.user.name, url='https://github.com/Just-Some-Bots/MusicBot', icon_url=self.user.avatar_url)
+        e.set_footer(text='CPH Music || By Trần Hiếu ({})'.format(BOTVERSION), icon_url='https://cdn.discordapp.com/app-icons/608537864942387231/6eaf9273ae5f60c6bfa74f416bb34b95.png?size=64')
         return e
 
     async def cmd_resetplaylist(self, player, channel):
@@ -1165,7 +1164,7 @@ class MusicBot(discord.Client):
 
         desc = '```\n' + ', '.join(self.commands) + '\n```\n' + self.str.get(
             'cmd-help-response', 'For information about a particular command, run `{}help [command]`\n'
-                                 'For further help, see https://just-some-bots.github.io/MusicBot/').format(prefix)
+                                 'For further help').format(prefix)
         if not self.is_all:
             desc += self.str.get('cmd-help-all', '\nOnly showing commands you can use, for a list of all commands, run `{}help all`').format(prefix)
 
