@@ -1,7 +1,7 @@
 FROM alpine:edge
 
 # Add project source
-WORKDIR /usr/src/MusicBot
+WORKDIR ../MusicBot
 COPY . ./
 
 # Install dependencies
@@ -30,7 +30,7 @@ RUN apk update \
 && apk del .build-deps
 
 # Create volume for mapping the config
-VOLUME /usr/src/MusicBot/config
+VOLUME ../MusicBot/config
 
 ENV APP_ENV=docker
 
